@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Number Guessing Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #eeeff1;
+      background-image: url('https://funpartypop.com/wp-content/uploads/2021/11/PICK-A-NUMBER-GAME-how-to-1024x1536.jpg');
+      border-radius: 8px;
+      text-align: center;
+    }
+    input[type="number"] {
+      padding: 10px;
+      width: 60%;
+      font-size: 30px;
+    }
+    button {
+      padding: 8px 15px;
+      font-size: 20px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Number Guessing Game</h1>
+  <p>Guess a number between 1 and 100.</p>
+
+  <input type="number" id="guessInput" min="1" max="100" />
+  <button id="guessBtn">Guess</button>
+
+  <p id="message"></p>
+  <p>Attempts left: <span id="attemptsLeft">10</span></p>
+
+  <button id="restartBtn" style="display:none; margin-top: 20px;">Restart Game</button>
+
+  <script>
+    let randomNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 10;
+
+    const guessInput = document.getElementById('guessInput');
+    const guessBtn = document.getElementById('guessBtn');
+    const message = document.getElementById('message');
+    const attemptsLeft = document.getElementById('attemptsLeft');
+    const restartBtn = document.getElementById('restartBtn');
+
+    guessBtn.addEventListener('click', () => {
+      const guess = Number(guessInput.value);
+      if (!guess || guess < 1 || guess > 100) {
+        message.textContent = 'Please enter a valid number between 1 and 100.';
+        return;
+      }
+
+      attempts--;
+      attemptsLeft.textContent = attempts;
+
+      if (guess === randomNumber) {
+        message.textContent = `🎉 Correct! The number was ${randomNumber}. You win!`;
+        endGame();
+      } else if (guess > randomNumber) {
+        message.textContent = 'Too high! Try again.';
+      } else {
+        message.textContent = 'Too low! Try again.';
+      }
+
+      if (attempts === 0 && guess !== randomNumber) {
+        message.textContent = `Game over! The number was ${randomNumber}.`;
+        endGame();
+      }
+
+      guessInput.value = '';
+      guessInput.focus();
+    });
+
+    restartBtn.addEventListener('click', () => {
+      randomNumber = Math.floor(Math.random() * 100) + 1;
+      attempts = 10;
+      attemptsLeft.textContent = attempts;
+      message.textContent = '';
+      guessInput.value = '';
+      guessInput.disabled = false;
+      guessBtn.disabled = false;
+      restartBtn.style.display = 'none';
+    });
+
+    function endGame() {
+      guessInput.disabled = true;
+      guessBtn.disabled = true;
+      restartBtn.style.display = 'inline-block';
+    }
+  </script>
+</body>
+</html>
